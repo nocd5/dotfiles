@@ -1,0 +1,15 @@
+map <C-TAB> :tabnext<CR>
+map <C-S-TAB> :tabprevious<CR>
+nmap <C-TAB> :tabnext<CR>
+nmap <C-S-TAB> :tabprevious<CR>
+imap <C-TAB> <ESC>:tabnext<CR>
+imap <C-S-TAB> <ESC>:tabprevious<CR>
+map <silent> <F3> :e %:p:h<CR>
+map <C-CR> <S-o><DOWN><ESC>
+set columns=81
+set cmdheight=1
+colorscheme nocd5
+" set guifont=Monaco:h9:cANSI
+set guifont=Monaco:h10:cSHIFTJIS
+set guifontwide=Arisaka-fix
+set printfont=ARISAKA-fix:h10:cSHIFTJIS

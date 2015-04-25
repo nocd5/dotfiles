@@ -1,0 +1,149 @@
+-- %HOME%がないと、SSHの鍵などが探せない
+nyagos.setenv('HOME', nyagos.getenv('USERPROFILE'))
+nyagos.setenv('DISPLAY', 'localhost:0.0')
+nyagos.setenv('SSL_CERT_FILE',  nyagos.getenv("HOME") .. '/ssl/certs/cacert.pem')
+
+addpath("C:/Tools/bin")
+addpath("C:/Tools/MSYS/bin")
+addpath("C:/Tools/GnuWin32/bin")
+addpath("C:/Tools/Ruby/bin")
+addpath("C:/Tools/gopath/bin")
+
+local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
+local chank,err=assert(loadfile(home .. "/nocd5utils.nyagos.lua"))
+if err then
+    print(err)
+else
+    chank()
+end
+
+alias{
+    _cd='cd', -- cdコマンドの再帰呼び出しを回避
+    cd=nocd5_icd,
+    pcd=nocd5_pcd,
+    gm='gookmark',
+    pushd=nocd5_pushd,
+    popd=nocd5_popd,
+    dirs=nocd5_dirs,
+    pu=nocd5_pushd,
+    po=nocd5_popd,
+    di=nocd5_dirs,
+    md='mkdir',
+    cp='cp -i',
+    rm='rm -i',
+    mv='mv -i',
+    ll='ls -l',
+    l='ls -l',
+    lls='ls',
+    sl='ls -r',
+    hi='history 22',
+    vi='ruby C:/Tools/bin/vim.rb',
+    vim='ruby C:/Tools/bin/vim.rb',
+    open='minshell',
+    sudo='runas /user:administrator',
+    menu='C:/Software/TCM/TCM32.exe -x 900 -y 400',
+    menu64='C:/Software/TCM/TCM64.exe -x 900 -y 400',
+}
+
+-- use_*
+alias{
+    use_edison=function()
+        addpath('C:/Tools/edison/sysroots/i686-pokysdk-mingw32/usr/bin/i586-poky-linux')
+        nyagos.setenv("SYSROOT", 'C:/Tools/edison/sysroots/core2-32-poky-linux')
+    end,
+    use_gcc32_492=function()
+        addpath('C:/Tools/Mingw_4.9.2/bin')
+    end,
+    use_gcc32_481=function()
+        addpath('C:/Tools/Mingw_4.8.1-3/bin')
+    end,
+    use_gcc64_481=function()
+        addpath('C:/Tools/Mingw64_4.8.1-3/bin')
+    end,
+    use_hg=function()
+        addpath('C:/Tools/Python_2.7.8')
+        addpath('C:/Tools/Mercurial/SCRIPTS')
+        nyagos.exec('alias hg="python C:/Tools/Mercurial/SCRIPTS/hg"')
+    end,
+    use_git=function()
+        nyagos.setenv('TERM', 'msys')
+        addpath('C:/Tools/Git/bin')
+    end,
+    use_go64=function()
+        nyagos.setenv('GOROOT', 'C:/Tools/go')
+        nyagos.setenv('GOPATH', 'C:/Tools/gopath')
+        addpath(nyagos.getenv('GOROOT') .. '/bin')
+    end,
+    use_go32=function()
+        nyagos.setenv('GOROOT', 'C:/Tools/go32')
+        nyagos.setenv('GOPATH', 'C:/Tools/gopath')
+        addpath(nyagos.getenv('GOROOT') .. '/bin')
+    end,
+    use_splint=function()
+        nyagos.setenv('SPLINT_PATH', 'C:/Tools/Splint')
+        addpath(nyagos.getenv('SPLINT_PATH') .. '/bin')
+    end,
+    use_vc10=function()
+        addpath('C:/Tools/VC10/bin')
+        nyagos.setenv('INCLUDE', 'C:/Tools/VC10/include')
+        nyagos.setenv('LIB', 'C:/Tools/VC10/lib')
+    end,
+    use_vc10x64=function()
+        addpath('C:/Tools/VC10x64/bin/amd64')
+        addpath('C:/Tools/VC10x64/bin/x64')
+        nyagos.setenv('INCLUDE', 'C:/Tools/VC10x64/include')
+        nyagos.setenv('LIB', 'C:/Tools/VC10x64/lib/amd64;C:/Tools/VC10x64/lib/x64;')
+    end,
+    use_llvm360=function()
+        addpath('C:/Tools/LLVM_3.6.0/bin')
+    end,
+    use_swig=function()
+        addpath('C:/Tools/swig/bin')
+    end,
+    use_doxygen=function()
+        addpath('C:/Tools/Doxygen/bin/Release')
+    end,
+    use_android=function()
+        addpath('C:/Tools/Android/apache-ant-1.8.2/bin')
+        addpath('C:/Tools/Android/android-sdk-windows/tools')
+        addpath('C:/Tools/Android/android-sdk-windows/platform-tools')
+        nyagos.setenv('JAVA_HOME', 'C:/Program Files/Java/jdk1.8.0_20')
+    end,
+    use_nodejs=function()
+        addpath('C:/Tools/nodejs')
+        addpath('%USERPROFILE%/AppData/Roaming/npm')
+        nyagos.setenv('NODE_HOME', 'C:/Tools/nodejs')
+    end,
+    use_postgres=function()
+        addpath('C:/Tools/postgresql/bin')
+    end
+}
+
+alias {
+    hoge=function()
+        local path = nyagos.eval('pwd')
+        print("\"".. path .. "\"")
+    end
+}
+
+nyagos.bindkey("C_C","INTR")
+nyagos.bindkey("C_X",
+    function(this)
+        print("\nthis.text: [" .. this.text .. "]")
+        print("this.pos: " .. this.pos)
+        print("this.text:len: " .. string.len(this.text))
+        return false
+    end
+)
+nyagos.bindkey("C_N",
+    function(this)
+        search_history(this, false)
+    end
+)
+nyagos.bindkey("C_P",
+    function(this)
+        search_history(this, true)
+    end
+)
+
+-- vim:set ft=lua: --

@@ -1,0 +1,9 @@
+[user]
+	name = nocd5
+	email = nocd5rd@gmail.com
+
+[core]
+	pager = less -q
+
+[alias]
+	glog = log --graph --decorate --abbrev-commit

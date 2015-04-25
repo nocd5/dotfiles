@@ -1,0 +1,46 @@
+!
+! ckw setting
+!
+
+Ckw*foreground:     white
+Ckw*background:     #2A2A2A
+Ckw*cursorColor:    #40FF40
+Ckw*cursorImeColor: #FF4040
+
+! Ckw*color0: #333333
+Ckw*color1: #4040C0
+Ckw*color2: #40C040
+Ckw*color3: #40C0C0
+Ckw*color4: #C04040
+Ckw*color5: #C040C0
+Ckw*color6: #C0C040
+! Ckw*color7: #CCCCCC
+! Ckw*color8: #333333
+Ckw*color9: #0808FF
+Ckw*color10: #80FF80
+Ckw*color11: #80FFFF
+Ckw*color12: #FF8080
+Ckw*color13: #FF80FF
+Ckw*color14: #FFFF80
+! Ckw*color15: #CCCCCC
+
+! Ckw*backgroundBitmap: ckw_background.bmp
+
+Ckw*scrollHide:  no
+Ckw*scrollRight: yes
+Ckw*internalBorder: 1
+Ckw*lineSpace: 0
+Ckw*topmost: no
+!Ckw*transp: 255
+!Ckw*transpColor: #000000
+
+! Ckw*font: ARISAKA-fix
+! Ckw*font: Meiryo
+Ckw*font: Monaco
+Ckw*fontSize: 14
+Ckw*fontSpace: 2
+
+Ckw*geometry:  80x24
+Ckw*saveLines: 500
+
+Ckw*exec: C:/Tools/gopath/bin/nyagos.exe

@@ -1,0 +1,27 @@
+[ui]
+username = nocd5
+editor = C:/Tools/bin/gvim.exe
+
+[extensions]
+hgext.win32mbcs=
+hgext.convert =
+color =
+graphlog =
+mq =
+rebase =
+transplant =
+record =
+bookmarks =
+hggit = C:/Tools/Python_2.7.8/Lib/site-packages/hg_git-0.6.1-py2.7.egg/hggit
+
+[alias]
+slog = log --template '{rev}:{node|short} {desc|firstline}\n'
+
+[web]
+cacerts = ~/ssl/certs/cacert.pem
+
+[mq]
+secret = True
+
+[phases]
+checksubrepos = abort
