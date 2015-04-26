@@ -28,6 +28,7 @@ alias{
     pu=nocd5_pushd,
     po=nocd5_popd,
     di=nocd5_dirs,
+    which=nocd5_which,
     md='mkdir',
     cp='cp -i',
     rm='rm -i',

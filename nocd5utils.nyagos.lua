@@ -390,4 +390,43 @@ function search_history(this, is_prev)
     end
 end
 
+------------------------------------------------
+-- $PATHを全てサーチするwhich
+function nocd5_which(args)
+    if #args == 0 then
+        return
+    end
+    for i, arg in ipairs(args) do
+        found = false
+        for k, ext in ipairs(split(string.lower(nyagos.getenv("PATHEXT")), ";")) do
+            if arg:find('[/\\]') then
+                if fileExists(arg .. ext) then
+                    print((arg .. ext):gsub("\\", "/"))
+                    found = true
+                end
+            else
+                paths = split(nyagos.getenv("PATH"), ";")
+                table.insert(paths, 1,".")
+                for j, path in ipairs(paths) do
+                    if fileExists(path .. "/" .. arg .. ext) then
+                        print((path .. "/" .. arg .. ext):gsub("\\", "/"))
+                        found = true
+                    end
+                end
+            end
+        end
+        if found ~= true then
+            print("exec: \"" .. arg .. "\": executable file not found in %PATH%")
+        end
+    end
+end
+function fileExists(name)
+    fp, e = io.open(name, "r")
+    if e == nil then
+        io.close(fp)
+        return true
+    end
+    return false
+end
+
 -- vim:set ft=lua: --
