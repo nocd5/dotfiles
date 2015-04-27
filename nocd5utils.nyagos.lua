@@ -391,13 +391,18 @@ function search_history(this, is_prev)
 end
 
 ------------------------------------------------
--- $PATHを全てサーチするwhich
+-- $PATHとaliasを全てサーチするwhich
 function nocd5_which(args)
     if #args == 0 then
         return
     end
     for i, arg in ipairs(args) do
         found = false
+        aliased = getAliasedCommand(arg)
+        if aliased ~= nil then
+            print(arg .. ": aliased to " .. aliased)
+            found = true
+        end
         for k, ext in ipairs(split(string.lower(nyagos.getenv("PATHEXT")), ";")) do
             if arg:find('[/\\]') then
                 if fileExists(arg .. ext) then
@@ -419,6 +424,15 @@ function nocd5_which(args)
             print("exec: \"" .. arg .. "\": executable file not found in %PATH%")
         end
     end
+end
+function getAliasedCommand(key)
+    for i, e in pairs(split(nyagos.eval("alias"),'[\r\n]')) do
+        alias = split(e, '=')
+        if key == alias[1] then
+            return alias[2]
+        end
+    end
+    return nil
 end
 function fileExists(name)
     fp, e = io.open(name, "r")
