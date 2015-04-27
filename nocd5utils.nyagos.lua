@@ -224,11 +224,22 @@ function nocd5_pgf(args)
         if is_dir(target) then
             nocd5_pushd({'"' .. target .. '"'})
         else
-            nyagos.exec('vim ' .. target)
+            nyagos.exec('open ' .. target)
         end
     end
 end
 alias { pgf=nocd5_pgf }
+function nocd5_dot(args)
+    local target = nyagos.eval('gookmark list --group dot | peco')
+    if target ~= nil and target ~= "" then
+        if is_dir(target) then
+            nocd5_pushd({'"' .. target .. '"'})
+        else
+            nyagos.exec('vim ' .. target)
+        end
+    end
+end
+alias { dot=nocd5_dot }
 -- 
 function is_dir(f)
     return nyagos.eval('file ' .. f):find(': directory')
