@@ -1,0 +1,14 @@
+[ui]
+  editor = "vim"
+
+[core]
+  linefeed = "unix"
+
+[alias]
+  ad = "add --group dot"
+  af = "add --group file"
+  ed = "edit --group dot"
+  ef = "edit --group file"
+  ld = "list --group dot"
+  lf = "list --group file"
+
