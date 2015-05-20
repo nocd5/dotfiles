@@ -1,10 +1,21 @@
 ------------------------------------------------
 -- ディレクトリ移動時にPROMPTを変更する
+-- makePrompt()が重い(特にネットワークドライブ上など)ので
+-- ディレクトリ移動時にのみPROMPTを更新
+local PROMPT = ''
+__cd = function(arg)
+    r, err = nyagos.exec('_cd "' .. arg .. '"')
+    PROMPT = makePrompt()
+    return r, err
+end
 local _prompt = nyagos.prompt
 nyagos.prompt = function(template)
     nyagos.setenv('VDATE', os.date('%y%m%d_%H%M%S'))
     nyagos.setenv('DATE', os.date('%y%m%d'))
-    return _prompt(makePrompt())
+    if (PROMPT == '') then
+        PROMPT = makePrompt()
+    end
+    return _prompt(PROMPT)
 end
 ------------------------------------------------
 -- PROMPT生成部分
@@ -59,9 +70,9 @@ local directory_stack = {}
 function nocd5_pushd(args)
     local old = chomp(nyagos.eval('pwd'))
     if #args >= 1 then
-        r, err = nyagos.exec('_cd "' .. args[1] .. '"')
+        r, err = __cd('"' .. args[1] .. '"')
     else
-        r, err = nyagos.exec('_cd ~')
+        r, err = __cd('~')
     end
     if err == nil then
         table.insert(directory_stack, 1, old)
@@ -79,7 +90,7 @@ function nocd5_popd(args)
         else
             num = tonumber(args[1])
         end
-        nyagos.exec('_cd "' .. directory_stack[num] .. '"')
+        __cd('"' .. directory_stack[num] .. '"')
         table.remove(directory_stack, num)
     else
         print ('popd: directories stack is empty.')
