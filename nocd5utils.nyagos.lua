@@ -28,11 +28,26 @@ end
 function makePrompt()
     prompt  = '$e[30;40;1m[' .. getCompressedPath(3):gsub('\\', '/') .. ']$e[37;1m'
     rprompt = "$e[30;40;1mnyagos$e[37;1m"
-    pad = nyagos.getviewwidth() - string.len(removeEscapeSequence(prompt .. rprompt))
+    pad = nyagos.getviewwidth() - getStringWidth(removeEscapeSequence(prompt .. rprompt))
     for i = 1, pad do
         prompt = prompt .. ' '
     end
     return prompt .. rprompt .. '\n$ '
+end
+function getStringWidth(src)
+    width = 0
+    for p, c in utf8.codes(src) do
+        if (0 ~= bit32.band(c, 0x7FFFFF80)) then
+            if (0xFF61 <= c and c <= 0xFF9F) then
+                width = width + 1
+            else
+                width = width + 2
+            end
+        else
+            width = width + 1
+        end
+    end
+    return width
 end
 function removeEscapeSequence(src)
     -- FIXME : なぜか'$e%[(%d+;)+1m'でマッチしない
