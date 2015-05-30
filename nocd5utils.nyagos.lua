@@ -1,4 +1,6 @@
 ------------------------------------------------
+local UpdatePromptAlways = 1
+--
 -- ディレクトリ移動時にPROMPTを変更する
 -- makePrompt()が重い(特にネットワークドライブ上など)ので
 -- ディレクトリ移動時にのみPROMPTを更新
@@ -12,15 +14,29 @@ local _prompt = nyagos.prompt
 nyagos.prompt = function(template)
     nyagos.setenv('VDATE', os.date('%y%m%d_%H%M%S'))
     nyagos.setenv('DATE', os.date('%y%m%d'))
-    if (PROMPT == '') then
-        PROMPT = makePrompt()
+    if (UpdatePromptAlways == 1) then
+        return _prompt(makePrompt())
+    else
+        if (PROMPT == '') then
+            PROMPT = makePrompt()
+        end
+        return _prompt(PROMPT)
     end
-    return _prompt(PROMPT)
 end
 ------------------------------------------------
 -- PROMPT生成部分
 function makePrompt()
-    return '$e[30;40;1m[' .. getCompressedPath(3):gsub('\\', '/') .. ']' .. '$e[37;1m\n$ '
+    prompt  = '$e[30;40;1m[' .. getCompressedPath(3):gsub('\\', '/') .. ']$e[37;1m'
+    rprompt = "$e[30;40;1mnyagos$e[37;1m"
+    pad = nyagos.getviewwidth() - string.len(removeEscapeSequence(prompt .. rprompt))
+    for i = 1, pad do
+        prompt = prompt .. ' '
+    end
+    return prompt .. rprompt .. '\n$ '
+end
+function removeEscapeSequence(src)
+    -- FIXME : なぜか'$e%[(%d+;)+1m'でマッチしない
+    return src:gsub('$e%[%d+;%d+;1m',''):gsub('$e%[%d+;1m','')
 end
 ------------------------------------------------
 -- 最下層nのディレクトリ名だけ表示する文字列生成
