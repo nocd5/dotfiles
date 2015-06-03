@@ -23,17 +23,35 @@ nyagos.prompt = function(template)
         return _prompt(PROMPT)
     end
 end
+
 ------------------------------------------------
 -- PROMPT生成部分
 function makePrompt()
-    prompt  = '$e[30;40;1m[' .. getCompressedPath(3):gsub('\\', '/') .. ']$e[37;1m'
-    rprompt = "$e[30;40;1mnyagos$e[37;1m"
+    local prompt  = '$e[30;40;1m[' .. getCompressedPath(3):gsub('\\', '/') .. ']$e[37;1m'
+    local hgbranch = nyagos.eval('hg branch 2> nul')
+    local gitbranch = ''
+    gitbranch_tmp = nyagos.eval('git branch 2> nul')
+    if (gitbranch_tmp ~= '') then
+        gitbranch = gitbranch_tmp:match('%*%s(.[^\n]+)', 1)
+    end
+    rprompt = ''
+    if (hgbranch ~= '') then
+        rprompt = rprompt .. '$e[30;40;1m[$e[33;40;1m' .. hgbranch .. '$e[30;40;1m]$e[37;1m'
+    end
+    if (gitbranch ~= '') then
+        rprompt = rprompt .. '$e[30;40;1m[$e[33;40;1m' .. gitbranch .. '$e[30;40;1m]$e[37;1m'
+    end
     pad = nyagos.getviewwidth() - getStringWidth(removeEscapeSequence(prompt .. rprompt))
-    for i = 1, pad do
+    for i = 1, pad-1 do
         prompt = prompt .. ' '
     end
     return prompt .. rprompt .. '\n$ '
 end
+------------------------------------------------
+
+------------------------------------------------
+-- 文字列の幅を取得
+-- 半角文字:1, 全角文字:2 にカウント
 function getStringWidth(src)
     width = 0
     for p, c in utf8.codes(src) do
@@ -53,6 +71,7 @@ function removeEscapeSequence(src)
     -- FIXME : なぜか'$e%[(%d+;)+1m'でマッチしない
     return src:gsub('$e%[%d+;%d+;1m',''):gsub('$e%[%d+;1m','')
 end
+
 ------------------------------------------------
 -- 最下層nのディレクトリ名だけ表示する文字列生成
 function getCompressedPath(num)
