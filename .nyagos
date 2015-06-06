@@ -78,6 +78,11 @@ alias{
         nyagos.setenv('GOPATH', 'C:/Tools/gopath')
         addpath(nyagos.getenv('GOROOT') .. '/bin')
     end,
+    use_godev=function()
+        nyagos.setenv('GOROOT', 'C:/Tools/GoDev')
+        nyagos.setenv('GOPATH', 'C:/Tools/gopath')
+        addpath(nyagos.getenv('GOROOT') .. '/bin')
+    end,
     use_go32=function()
         nyagos.setenv('GOROOT', 'C:/Tools/go32')
         nyagos.setenv('GOPATH', 'C:/Tools/gopath')
