@@ -6,6 +6,7 @@ Ckw*foreground:     white
 Ckw*background:     #2A2A2A
 Ckw*cursorColor:    #40FF40
 Ckw*cursorImeColor: #FF4040
+Ckw*cursorBlink:    yes
 
 ! Ckw*color0: #333333
 Ckw*color1: #4040C0
