@@ -385,6 +385,9 @@ local _filter = nyagos.filter
 nyagos.filter = function(cmdline)
   local post = cmdline:gsub('${([%w_()]+)}', '%%%1%%')
   post = post:gsub('$([%w_()]+)', '%%%1%%')
+  if (split(post, ' ')[1] == 'open') then
+    post = post:gsub('/', '\\')
+  end
   return _filter(post)
 end
 
