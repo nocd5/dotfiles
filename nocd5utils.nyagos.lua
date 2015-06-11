@@ -6,7 +6,7 @@ local UpdatePromptAlways = 1
 -- ディレクトリ移動時にのみPROMPTを更新
 local PROMPT = ''
 __cd = function(arg)
-    r, err = nyagos.exec('__cd__ "' .. arg .. '"')
+    r, err = nyagos.exec('__cd__ "' .. arg:gsub('\\', '/') .. '"')
     PROMPT = makePrompt()
     return r, err
 end
@@ -120,7 +120,7 @@ local directory_stack = {}
 function nocd5_pushd(args)
     local old = chomp(nyagos.eval('pwd'))
     if #args >= 1 then
-        r, err = __cd('"' .. args[1] .. '"')
+        r, err = __cd(args[1])
     else
         r, err = __cd(getHome())
     end
@@ -140,7 +140,7 @@ function nocd5_popd(args)
         else
             num = tonumber(args[1])
         end
-        __cd('"' .. directory_stack[num] .. '"')
+        __cd(directory_stack[num])
         table.remove(directory_stack, num)
     else
         print ('popd: directories stack is empty.')
@@ -249,7 +249,7 @@ function nocd5_pcd(args)
     else
         local dir = nyagos.eval("echo " .. table.concat(directories, '\n') ..  " | peco")
         if dir ~= nil then
-            nocd5_pushd({'"' .. chomp(dir) .. '"'})
+            nocd5_pushd({ chomp(dir) })
         end
     end
 end
@@ -261,7 +261,7 @@ function nocd5_pgm(args)
     local target = nyagos.eval('gookmark list | peco')
     if target ~= nil and target ~= "" then
         if is_dir(target) then
-            nocd5_pushd({'"' .. target .. '"'})
+            nocd5_pushd({ target })
         else
             nyagos.exec('open ' .. target)
         end
@@ -272,7 +272,7 @@ function nocd5_pga(args)
     local target = nyagos.eval('gookmark list --group app | peco')
     if target ~= nil and target ~= "" then
         if is_dir(target) then
-            nocd5_pushd({'"' .. target .. '"'})
+            nocd5_pushd({ target })
         else
             nyagos.exec('open ' .. target)
         end
@@ -283,7 +283,7 @@ function nocd5_pgf(args)
     local target = nyagos.eval('gookmark list --group file | peco')
     if target ~= nil and target ~= "" then
         if is_dir(target) then
-            nocd5_pushd({'"' .. target .. '"'})
+            nocd5_pushd({ target })
         else
             nyagos.exec('open ' .. target)
         end
@@ -294,7 +294,7 @@ function nocd5_dot(args)
     local target = nyagos.eval('gookmark list --group dot | peco')
     if target ~= nil and target ~= "" then
         if is_dir(target) then
-            nocd5_pushd({'"' .. target .. '"'})
+            nocd5_pushd({ target })
         else
             nyagos.exec('vim ' .. target)
         end
@@ -303,7 +303,7 @@ end
 alias { dot=nocd5_dot }
 -- 
 function is_dir(f)
-    return nyagos.eval('file ' .. f):find(': directory')
+    return nyagos.stat(f).isdir
 end
 ----------------------------------------------------------
 
@@ -521,4 +521,5 @@ end
 function getHome()
     return nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 end
+
 -- vim:set ft=lua: --
