@@ -6,7 +6,7 @@ local UpdatePromptAlways = 1
 -- ディレクトリ移動時にのみPROMPTを更新
 local PROMPT = ''
 __cd = function(arg)
-    r, err = nyagos.exec('_cd "' .. arg .. '"')
+    r, err = nyagos.exec('__cd__ "' .. arg .. '"')
     PROMPT = makePrompt()
     return r, err
 end
@@ -81,7 +81,7 @@ function getCompressedPath(num)
     local drive = nil
 
     -- HOME以下の場合
-    local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
+    local home = getHome()
     if path:find(home)then
         drive = '~'
         path = path:gsub(home, '~')
@@ -122,7 +122,7 @@ function nocd5_pushd(args)
     if #args >= 1 then
         r, err = __cd('"' .. args[1] .. '"')
     else
-        r, err = __cd('~')
+        r, err = __cd(getHome())
     end
     if err == nil then
         table.insert(directory_stack, 1, old)
@@ -518,4 +518,7 @@ function fileExists(name)
     return false
 end
 
+function getHome()
+    return nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
+end
 -- vim:set ft=lua: --
