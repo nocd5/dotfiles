@@ -1,9 +1,12 @@
 ------------------------------------------------
-local UpdatePromptAlways = 1
---
 -- ディレクトリ移動時にPROMPTを変更する
+--
 -- makePrompt()が重い(特にネットワークドライブ上など)ので
 -- ディレクトリ移動時にのみPROMPTを更新
+-- local UpdatePromptAlways = false
+-- 右プロンプト表示のため(位置、ブランチの変更に追従)
+-- 常にプロンプトを更新
+local UpdatePromptAlways = true
 local PROMPT = ''
 __cd = function(arg)
     r, err = nyagos.exec('__cd__ "' .. arg:gsub('\\', '/') .. '"')
@@ -14,7 +17,7 @@ local _prompt = nyagos.prompt
 nyagos.prompt = function(template)
     nyagos.setenv('VDATE', os.date('%y%m%d_%H%M%S'))
     nyagos.setenv('DATE', os.date('%y%m%d'))
-    if (UpdatePromptAlways == 1) then
+    if (UpdatePromptAlways) then
         return _prompt(makePrompt())
     else
         if (PROMPT == '') then
@@ -28,13 +31,13 @@ end
 -- PROMPT生成部分
 function makePrompt()
     local prompt  = '$e[30;40;1m[' .. getCompressedPath(3):gsub('\\', '/') .. ']$e[37;1m'
+    local rprompt = ''
     local hgbranch = nyagos.eval('hg branch 2> nul')
     local gitbranch = ''
     gitbranch_tmp = nyagos.eval('git branch 2> nul')
     if (gitbranch_tmp ~= '') then
         gitbranch = gitbranch_tmp:match('%*%s(.[^\n]+)', 1)
     end
-    rprompt = ''
     if (hgbranch ~= '') then
         rprompt = rprompt .. '$e[30;40;1m[$e[33;40;1m' .. hgbranch .. '$e[30;40;1m]$e[37;1m'
     end
@@ -481,15 +484,17 @@ function nocd5_which(args)
         for k, ext in ipairs(split(string.lower(nyagos.getenv("PATHEXT")), ";")) do
             if arg:find('[/\\]') then
                 if fileExists(arg .. ext) then
-                    print((arg .. ext):gsub("\\", "/"))
+                    local p = (arg .. ext):gsub("\\", "/")
+                    print(p)
                     found = true
                 end
             else
                 paths = split(nyagos.getenv("PATH"), ";")
-                table.insert(paths, 1,".")
+                table.insert(paths, 1, ".")
                 for j, path in ipairs(paths) do
                     if fileExists(path .. "/" .. arg .. ext) then
-                        print((path .. "/" .. arg .. ext):gsub("\\", "/"))
+                        local p = (path .. "/" .. arg .. ext):gsub("\\", "/")
+                        print(p)
                         found = true
                     end
                 end
@@ -510,12 +515,7 @@ function getAliasedCommand(key)
     return nil
 end
 function fileExists(name)
-    fp, e = io.open(name, "r")
-    if e == nil then
-        io.close(fp)
-        return true
-    end
-    return false
+    return nyagos.stat(name) ~= nil
 end
 
 function getHome()
