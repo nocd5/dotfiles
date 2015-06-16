@@ -135,7 +135,7 @@ end
 ------------------------------------------------
 -- 最下層nのディレクトリ名だけ表示する文字列生成
 function getCompressedPath(num)
-    local path = chomp(nyagos.eval('pwd'))
+    local path = nyagos.getwd()
     local buff = path
 
     local drive = nil
@@ -178,7 +178,7 @@ local directory_stack = {}
 ------------------------------------------------
 -- pushd
 function nocd5_pushd(args)
-    local old = chomp(nyagos.eval('pwd'))
+    local old = nyagos.getwd()
     if #args >= 1 then
         r, err = __cd(args[1])
     else
@@ -268,7 +268,7 @@ end
 function getDirectoryList(parent, pattern)
     if parent:find('^[\\/].*') then
         if not(parent:find('^[\\/][\\/]+')) then
-            parent = nyagos.eval('pwd'):gsub('[\\/].*', '') .. parent:gsub('\\', '/')
+            parent = nyagos.getwd():gsub('[\\/].*', '') .. parent:gsub('\\', '/')
         end
     end
     local line = nyagos.eval('ls -lar ' .. parent) -- nyagos組み込みの`ls`
