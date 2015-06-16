@@ -27,21 +27,76 @@ nyagos.prompt = function(template)
     end
 end
 
+function getBranch()
+    local dir = '.'
+    branch = {
+        HgBranch = nil,
+        GitBranch = nil
+    }
+    while true do
+        local hgrepo = nyagos.stat(dir .. '/.hg')
+        local gitrepo = nyagos.stat(dir .. '/.git')
+        if hgrepo then
+            if hgrepo.isdir then
+                local fp = io.open(dir .. '/.hg/branch', 'r')
+                if fp then
+                    branch.HgBranch = fp:read()
+                    fp:close()
+                    break
+                end
+                break
+            end
+        elseif gitrepo then
+            if gitrepo.isdir then
+                local fp = io.open(dir .. '/.git/HEAD', 'r')
+                if fp then
+                    HEAD = fp:read()
+                    fp:close()
+                    if HEAD:match('ref: (%w+)') then
+                        branch.GitBranch = HEAD:gsub('ref: (%w+)', '%1')
+                    else
+                        local fp = io.open(dir .. '/.git/packed-refs', 'r')
+                        if fp then
+                            local line = fp:read()
+                            while line do
+                                if not line:match('^#.*') then
+                                    tag = split(line, ' ')
+                                    if tag[1] == HEAD then
+                                        branch.GitBranch = tag[2]
+                                    end
+                                end
+                                line = fp:read()
+                            end
+                            fp:close()
+                        end
+                        if not branch.GitBranch then
+                            branch.GitBranch = 'detached from ' .. HEAD:sub(1,7)
+                        end
+                    end
+                    break
+                end
+                break
+            end
+        end
+        dir = dir .. '/..'
+        if nyagos.stat(dir) == nil then
+            return branch
+        end
+    end
+    return branch
+end
+
 ------------------------------------------------
 -- PROMPT生成部分
 function makePrompt()
     local prompt  = '$e[30;40;1m[' .. getCompressedPath(3):gsub('\\', '/') .. ']$e[37;1m'
     local rprompt = ''
-    local hgbranch = nyagos.eval('hg branch 2> nul')
-    local gitbranch = ''
-    gitbranch_tmp = nyagos.eval('git branch 2> nul')
-    if (gitbranch_tmp ~= '') then
-        gitbranch = gitbranch_tmp:match('%*%s(.[^\n]+)', 1)
-    end
-    if (hgbranch ~= '') then
+    local hgbranch = getBranch().HgBranch
+    local gitbranch = getBranch().GitBranch
+    if (hgbranch ~= nil) then
         rprompt = rprompt .. '$e[30;40;1m[$e[33;40;1m' .. hgbranch .. '$e[30;40;1m]$e[37;1m'
     end
-    if (gitbranch ~= '') then
+    if (gitbranch ~= nil) then
         rprompt = rprompt .. '$e[30;40;1m[$e[33;40;1m' .. gitbranch .. '$e[30;40;1m]$e[37;1m'
     end
     pad = nyagos.getviewwidth() - getStringWidth(removeEscapeSequence(prompt .. rprompt))
