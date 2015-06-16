@@ -44,7 +44,8 @@ function getBranch()
                 if fp then
                     branch.HgBranch = fp:read()
                     fp:close()
-                    break
+                else
+                    branch.HgBranch = 'default'
                 end
                 break
             end
