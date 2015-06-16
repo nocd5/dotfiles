@@ -53,19 +53,19 @@ function getBranch()
             if gitrepo.isdir then
                 local fp = io.open(dir .. '/.git/HEAD', 'r')
                 if fp then
-                    HEAD = fp:read()
+                    local head = fp:read()
                     fp:close()
-                    if HEAD:match('ref: (%w+)') then
-                        branch.GitBranch = HEAD:gsub('ref: (%w+)', '%1')
+                    if head:match('ref: (%w+)') then
+                        branch.GitBranch = head:gsub('ref: (%w+)', '%1')
                     else
                         local fp = io.open(dir .. '/.git/packed-refs', 'r')
                         if fp then
                             local line = fp:read()
                             while line do
                                 if not line:match('^#.*') then
-                                    tag = split(line, ' ')
-                                    if tag[1] == HEAD then
-                                        branch.GitBranch = tag[2]
+                                    local ref = split(line, ' ')
+                                    if ref[1] == head then
+                                        branch.GitBranch = ref[2]
                                     end
                                 end
                                 line = fp:read()
