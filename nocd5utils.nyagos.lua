@@ -10,7 +10,9 @@ local UpdatePromptAlways = true
 local PROMPT = ''
 __cd = function(arg)
     r, err = nyagos.exec('__cd__ "' .. arg:gsub('\\', '/') .. '"')
-    PROMPT = makePrompt()
+    if (not UpdatePromptAlways) then
+        PROMPT = makePrompt()
+    end
     return r, err
 end
 local _prompt = nyagos.prompt
