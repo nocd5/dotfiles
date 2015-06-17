@@ -81,10 +81,10 @@ function getBranch()
                 break
             end
         end
-        dir = dir .. '/..'
         if nyagos.stat(dir) == nil then
             return branch
         end
+        dir = dir .. '/..'
     end
     return branch
 end
