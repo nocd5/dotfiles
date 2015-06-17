@@ -73,7 +73,7 @@ function getBranch()
                             fp:close()
                         end
                         if not branch.GitBranch then
-                            branch.GitBranch = 'detached from ' .. HEAD:sub(1,7)
+                            branch.GitBranch = 'detached from ' .. head:sub(1,7)
                         end
                     end
                     break
