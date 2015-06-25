@@ -580,4 +580,19 @@ function getHome()
     return nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 end
 
+nyagos.alias.ppt = function(args)
+    local sel = nyagos.eval('pt /column /columnasrune ' .. table.concat(args, ' ') ..  '| peco')
+    if (#sel == 0) then
+        return
+    end
+    local file, line, column = sel:match('(.*):(%d+):(%d+)')
+    if ((file and line and column) == nil) then
+        print("Error : Invalid format")
+        print(" -> " .. sel)
+        return
+    end
+    nyagos.exec('gvim.exe ' .. file .. ' +' .. line ..
+                ' -c \":normal 0\"' .. ' -c \":normal ' .. tonumber(column) - 1 .. 'l\" &')
+end
+
 -- vim:set ft=lua: --
