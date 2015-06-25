@@ -125,6 +125,12 @@ alias{
     end,
     use_postgres=function()
         addpath('C:/Tools/postgresql/bin')
+    end,
+    use_rust32=function()
+        addpath('C:/Tools/Rust32/bin')
+    end,
+    use_rust64=function()
+        addpath('C:/Tools/Rust64/bin')
     end
 }
 
