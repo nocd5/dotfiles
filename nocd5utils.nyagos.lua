@@ -63,7 +63,7 @@ function getBranch()
                             local line = fp:read()
                             while line do
                                 if not line:match('^#.*') then
-                                    local ref = split(line, ' ')
+                                    local ref = line:split(' ')
                                     if ref[1] == head then
                                         branch.GitBranch = ref[2]
                                     end
@@ -159,7 +159,7 @@ function getCompressedPath(num)
         buff = buff:gsub('\\\\.-\\', '')
     end
 
-    local tbl = split(buff, "[\\/]")
+    local tbl = buff:split("[\\/]")
     if #tbl > num then
         buff = "/..."
         for i = #tbl - (num - 1), #tbl do
@@ -273,7 +273,7 @@ function getDirectoryList(parent, pattern)
         end
     end
     local line = nyagos.eval('ls -lar ' .. parent) -- nyagos組み込みの`ls`
-    local complst = split(line, '[\r\n]')
+    local complst = line:split('[\r\n]')
     local directories = {}
     for i, e in ipairs(complst) do
         local name = tostring(e:gsub(".-%s+", "", 4))
@@ -371,7 +371,7 @@ end
 ------------------------------------------------
 -- strをpatで分割しテーブルを返す
 -- code from 'http://lua-users.org/wiki/SplitJoin'
-function split(str, pat)
+string.split = function(str, pat)
     local t = {}  -- NOTE: use {n = 0} in Lua-5.0
     local fpat = "(.-)" .. pat
     local last_end = 1
@@ -446,7 +446,7 @@ local _filter = nyagos.filter
 nyagos.filter = function(cmdline)
   local post = cmdline:gsub('${([%w_()]+)}', '%%%1%%')
   post = post:gsub('$([%w_()]+)', '%%%1%%')
-  if (split(post, ' ')[1] == 'open') then
+  if (post:split(' ')[1] == 'open') then
     post = post:gsub('/', '\\')
   end
   return _filter(post)
@@ -539,7 +539,7 @@ function nocd5_which(args)
             print(arg .. ": aliased to " .. aliased)
             found = true
         end
-        for k, ext in ipairs(split(string.lower(nyagos.getenv("PATHEXT")), ";")) do
+        for k, ext in ipairs(string.lower(nyagos.getenv("PATHEXT")):split(";")) do
             if arg:find('[/\\]') then
                 if fileExists(arg .. ext) then
                     local p = (arg .. ext):gsub("\\", "/")
@@ -547,7 +547,7 @@ function nocd5_which(args)
                     found = true
                 end
             else
-                paths = split(nyagos.getenv("PATH"), ";")
+                paths = nyagos.getenv("PATH"):split(";")
                 table.insert(paths, 1, ".")
                 for j, path in ipairs(paths) do
                     if fileExists(path .. "/" .. arg .. ext) then
@@ -564,8 +564,8 @@ function nocd5_which(args)
     end
 end
 function getAliasedCommand(key)
-    for i, e in pairs(split(nyagos.eval("alias"),'[\r\n]')) do
-        alias = split(e, '=')
+    for i, e in pairs(nyagos.eval("alias"):split('[\r\n]')) do
+        alias = e:split('=')
         if key == alias[1] then
             return alias[2]
         end
