@@ -161,4 +161,10 @@ nyagos.bindkey("C_P",
     end
 )
 
+-- やっぱりパイプで落ちる事が頻繁に起こるので
+-- `nyagos.argsfilter`を潰しておく
+nyagos.argsfilter = function(args)
+    return args
+end
+
 -- vim:set ft=lua: --
