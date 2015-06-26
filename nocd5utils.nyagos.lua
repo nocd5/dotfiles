@@ -595,4 +595,44 @@ nyagos.alias.ppt = function(args)
                 ' -c \":normal 0\"' .. ' -c \":normal ' .. tonumber(column) - 1 .. 'l\" &')
 end
 
+nyagos.on_command_not_found = function(args)
+    local cand = {}
+    for i, e in pairs(makeCandidates(args[0])) do
+        if (nyagos.which(e)) then
+            table.insert(cand, e)
+        end
+    end
+    if (#cand > 0) then
+        print('もしかして...')
+        for i, e in pairs(cand) do
+            print('\027[32;;1m' .. i .. '\027[;;0m : ' .. e)
+        end
+        local index = getIndex()
+        if #cand < index then
+            print(index .. ': Invalid index')
+        elseif 0 < index then
+            print(cand[index] .. ' ' .. table.concat(args, ' '))
+            nyagos.exec(cand[index] .. ' ' .. table.concat(args, ' '))
+        end
+        return true
+    end
+    return false
+end
+
+function makeCandidates(src)
+    local result = {}
+
+    local tbl = {}
+    for p, c in utf8.codes(src) do
+        table.insert(tbl, utf8.char(c))
+    end
+    for i = 1, string.len(src) - 1 do
+        local tmp = table.pack(table.unpack(tbl))
+        table.insert(tmp, i+2, tmp[i])
+        table.remove(tmp, i)
+        table.insert(result, table.concat(tmp))
+    end
+    return result
+end
+
 -- vim:set ft=lua: --
