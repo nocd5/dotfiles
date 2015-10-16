@@ -44,6 +44,7 @@ alias{
     sudo='runas /user:administrator',
     menu='C:/Software/TCM/TCM32.exe -x 900 -y 400',
     menu64='C:/Software/TCM/TCM64.exe -x 900 -y 400',
+    pidcat='C:/Tools/Python_2.7.8/python -u C:/Tools/bin/pidcat.py | crz',
 }
 
 -- use_*
@@ -68,6 +69,9 @@ alias{
         addpath('C:/Tools/Python_2.7.8')
         addpath('C:/Tools/Mercurial/SCRIPTS')
         nyagos.exec('alias hg="python C:/Tools/Mercurial/SCRIPTS/hg"')
+    end,
+    use_python=function()
+        addpath('C:/Tools/Python_2.7.8')
     end,
     use_git=function()
         nyagos.setenv('TERM', 'msys')
@@ -97,6 +101,12 @@ alias{
         nyagos.setenv('INCLUDE', 'C:/Tools/VC10/include')
         nyagos.setenv('LIB', 'C:/Tools/VC10/lib')
     end,
+    use_vc14=function()
+        addpath('C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin')
+        nyagos.setenv('INCLUDE', 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include;C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Include')
+        nyagos.setenv('LIB', 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/lib;C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib')
+        nyagos.setenv('VisualStudioVersion', '14.0')
+    end,
     use_vc10x64=function()
         addpath('C:/Tools/VC10x64/bin/amd64')
         addpath('C:/Tools/VC10x64/bin/x64')
@@ -113,15 +123,18 @@ alias{
         addpath('C:/Tools/Doxygen/bin/Release')
     end,
     use_android=function()
-        addpath('C:/Tools/Android/apache-ant-1.8.2/bin')
-        addpath('C:/Tools/Android/android-sdk-windows/tools')
-        addpath('C:/Tools/Android/android-sdk-windows/platform-tools')
+        addpath('C:/Tools/apache-ant-1.9.6/bin')
+        addpath('C:/Tools/Android/sdk/tools')
+        addpath('C:/Tools/Android/sdk/platform-tools')
         nyagos.setenv('JAVA_HOME', 'C:/Program Files/Java/jdk1.8.0_20')
     end,
     use_nodejs=function()
         addpath('C:/Tools/nodejs')
         addpath('%USERPROFILE%/AppData/Roaming/npm')
         nyagos.setenv('NODE_HOME', 'C:/Tools/nodejs')
+    end,
+    use_cf=function()
+        addpath('C:/Tools/CloudFoundryCLI/bin')
     end,
     use_postgres=function()
         addpath('C:/Tools/postgresql/bin')
@@ -131,6 +144,12 @@ alias{
     end,
     use_rust64=function()
         addpath('C:/Tools/Rust64/bin')
+    end,
+    use_arduino=function()
+        addpath('C:/Tools/Python_2.7.8')
+        addpath('C:/Tools/Python_2.7.8/Scripts')
+        addpath('C:/Users/masamichi_2/.platformio/packages/toolchain-atmelavr/bin')
+        nyagos.setenv('SYSROOT', 'C:/Users/masamichi_2/.platformio/packages/toolchain-atmelavr')
     end
 }
 

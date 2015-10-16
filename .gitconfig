@@ -7,3 +7,5 @@
 
 [alias]
 	glog = log --graph --decorate --abbrev-commit
+[ghq]
+	root = I:/Freespace/src

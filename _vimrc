@@ -92,6 +92,7 @@ let MyGrep_MenuBar=0
 set runtimepath+=~/vimplugins/open-browser.vim
 set runtimepath+=~/vimplugins/previm
 set runtimepath+=~/vimplugins/java_getset.vim
+set runtimepath+=~/vimplugins/gundo.vim
 
 " Load settings for each location.
 augroup vimrc-local
