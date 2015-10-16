@@ -124,3 +124,39 @@ endif
 
 au BufNewFile,BufReadPost \[tweetvim\] nnoremap <silent> <leader>S  :<C-u>TweetVimSay<CR>
 au FileType * IminsertOff
+
+function s:Wundo(dir)
+    if expand("%") != ""
+        silent execute "wundo! " . a:dir . "/" . expand("%") . ".un~"
+    endif
+endfunction
+
+function s:Rundo(dir)
+    if filereadable(a:dir . "/" . expand("%") . ".un~")
+        silent execute "rundo " . a:dir . "/" . expand("%") . ".un~"
+    endif
+endfunction
+
+function! s:Store()
+    let l:ct = tabpagenr()
+    let l:cw = winnr()
+    if !isdirectory(".sessions")
+        call mkdir(".sessions")
+    endif
+    silent tabdo windo call s:Wundo(".sessions")
+    silent mks! .sessions/session.vim
+    silent execute "tabnext " . l:ct
+    silent execute l:cw . "wincmd w"
+endfunction
+
+function! s:Restore()
+    let l:ct = tabpagenr()
+    let l:cw = winnr()
+    silent source .sessions/session.vim
+    silent tabdo windo call s:Rundo(".sessions")
+    silent execute "tabnext " . l:ct
+    silent execute l:cw . "wincmd w"
+endfunction
+
+command! Store call s:Store()
+command! Restore call s:Restore()
