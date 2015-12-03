@@ -146,10 +146,15 @@ alias{
         addpath('C:/Tools/Rust64/bin')
     end,
     use_arduino=function()
-        addpath('C:/Tools/Python_2.7.8')
-        addpath('C:/Tools/Python_2.7.8/Scripts')
+        addpath('C:/Tools/python-2.7.10.amd64')
+        addpath('C:/Tools/python-2.7.10.amd64/Scripts')
         addpath('C:/Users/masamichi_2/.platformio/packages/toolchain-atmelavr/bin')
         nyagos.setenv('SYSROOT', 'C:/Users/masamichi_2/.platformio/packages/toolchain-atmelavr')
+    end,
+    use_nucleo=function()
+        addpath('C:/Tools/python-2.7.10.amd64')
+        addpath('C:/Tools/python-2.7.10.amd64/Scripts')
+        addpath('C:/Users/masamichi_2/.platformio/packages/toolchain-gccarmnoneeabi/bin')
     end
 }
 
