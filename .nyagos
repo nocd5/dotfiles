@@ -185,15 +185,15 @@ alias{
     end
 }
 
--- nyagos.bindkey("C_N",
---     function(this)
---         share.search_history(this, false)
---     end
--- )
--- nyagos.bindkey("C_P",
---     function(this)
---         share.search_history(this, true)
---     end
--- )
+nyagos.bindkey("C_N",
+    function(this)
+        share.search_history(this, false)
+    end
+)
+nyagos.bindkey("C_P",
+    function(this)
+        share.search_history(this, true)
+    end
+)
 
 -- vim:set ft=lua: --

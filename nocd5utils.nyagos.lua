@@ -2,15 +2,22 @@ share.directory_stack = {}
 share.migemo_dict = 'C:/Tools/bin/dict/utf-8/migemo-dict'
 share.luamigemo = nil
 
-
 share.print = function(s)
     nyagos.write(s)
     nyagos.write('\n')
 end
 
-share._prompt = nyagos.prompt
-
+------------------------------------------------
+-- ディレクトリ移動時にPROMPTを変更する
+--
+-- makePrompt()が重い(特にネットワークドライブ上など)ので
+-- ディレクトリ移動時にのみPROMPTを更新
+-- local UpdatePromptAlways = false
+-- 右プロンプト表示のため(位置、ブランチの変更に追従)
+-- 常にプロンプトを更新
 share.UpdatePromptAlways = true
+
+share.prompt = nyagos.prompt
 share.PROMPT = ''
 share.cd = function(arg)
     r, err = nyagos.exec('__cd__ "' .. arg:gsub('\\', '/') .. '"')
@@ -21,7 +28,7 @@ share.cd = function(arg)
 end
 
 nyagos.prompt = function(template)
-    return share._prompt(share.makePrompt())
+    return share.prompt(share.makePrompt())
 end
 
 ------------------------------------------------
@@ -128,7 +135,7 @@ share.getBranch = function()
                             fp:close()
                         end
                         if not branch.GitBranch then
-                            branch.GitBranch = 'detached from ' .. head:sub(1,7)
+                            branch.GitBranch = 'detached from ' .. head:sub(1, 7)
                         end
                     end
                     break
