@@ -12,7 +12,7 @@ end
 --
 -- makePrompt()が重い(特にネットワークドライブ上など)ので
 -- ディレクトリ移動時にのみPROMPTを更新
--- local UpdatePromptAlways = false
+-- share.UpdatePromptAlways = false
 -- 右プロンプト表示のため(位置、ブランチの変更に追従)
 -- 常にプロンプトを更新
 share.UpdatePromptAlways = true
@@ -28,7 +28,14 @@ share.cd = function(arg)
 end
 
 nyagos.prompt = function(template)
-    return share.prompt(share.makePrompt())
+    if (share.UpdatePromptAlways) then
+        return share.prompt(share.makePrompt())
+    else
+        if (share.PROMPT == '') then
+            share.PROMPT = share.makePrompt()
+        end
+        return share.prompt(share.PROMPT)
+    end
 end
 
 ------------------------------------------------
