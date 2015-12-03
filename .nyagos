@@ -12,7 +12,7 @@ addpath("C:/Tools/Ruby/bin")
 addpath("C:/Tools/gopath/bin")
 
 share.home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
-local chank, err=assert(loadfile(share.home .. "/nocd5utils.nyagos.lua"))
+local chank, err = assert(loadfile(share.home .. "/nocd5utils.nyagos.lua"))
 if err then
     print(err)
 else
@@ -56,7 +56,7 @@ alias{
     proxycfg = 'netsh winhttp show proxy',
     menu     = 'C:/Software/tcm/TCM32.exe -x 600 -y 500',
     menu64   = 'C:/Software/tcm/TCM64.exe -x 600 -y 500',
-    pidcat   = 'C:/Tools/python-2.7.9/python -u C:/Tools/bin/pidcat.py | crz'
+    pidcat   = 'C:/Tools/python-2.7.9/python -u C:/Tools/bin/pidcat.py | crz',
 }
 
 -- use_*
@@ -76,70 +76,46 @@ share.addpath = function(...)
     end
 end
 alias{
-    use_android = function()
-        share.addpath('C:/Program Files/Java/jdk1.7.0_79/bin')
-        share.addpath('C:/Program Files/Android/Android Studio/bin')
-        share.addpath('C:/Program Files/Android/Android Studio/gradle/gradle-2.2.1/bin')
-        share.addpath('C:/Tools/Android/sdk/tools')
-        share.addpath('C:/Tools/Android/sdk/platform-tools')
-        share.addpath('C:/Tools/apache-ant/bin')
-        nyagos.setenv('JAVA_HOME', 'C:/Program Files/Java/jdk1.7.0_79')
-        nyagos.setenv('JAVA_OPTS', '-DproxyHost=proxy.int.njr.co.jp -DproxyPort=10080')
-    end,
-    use_edison_16 = function()
-        share.addpath('C:/Tools/edison_1.6/sysroots/i686-pokysdk-mingw32/usr/bin/i586-poky-linux')
-        nyagos.setenv('SYSROOT', 'C:/Tools/edison_1.6/sysroots/core2-32-poky-linux')
-        nyagos.setenv('GNU_PREFIX', 'i586-poky-linux-')
-    end,
-    use_gcc32_481 = function()
-        share.addpath('C:/Tools/mingw_4.8.1/bin')
+    use_edison = function()
+        share.addpath('C:/Tools/edison/sysroots/i686-pokysdk-mingw32/usr/bin/i586-poky-linux')
+        nyagos.setenv("SYSROOT", 'C:/Tools/edison/sysroots/core2-32-poky-linux')
     end,
     use_gcc32_492 = function()
-        share.addpath('C:/Tools/mingw_4.9.2/bin')
-    end,
-    use_gcc32_510 = function()
-        share.addpath('C:/Tools/mingw_5.1.0/bin')
+        share.addpath('C:/Tools/Mingw_4.9.2/bin')
     end,
     use_gcc64_492 = function()
-        share.addpath('C:/Tools/mingw64_4.9.2/bin')
+        share.addpath('C:/Tools/Mingw64_4.9.2/bin')
     end,
-    use_gcc64_510 = function()
-        share.addpath('C:/Tools/mingw64_5.1.0/bin')
+    use_gcc32_481 = function()
+        share.addpath('C:/Tools/Mingw_4.8.1-3/bin')
     end,
-    use_python = function()
-        share.addpath('C:/Tools/python27')
-    end,
-    use_python86 = function()
-        share.addpath('C:/Tools/Python27x86')
-    end,
-    use_python64 = function()
-        share.addpath('C:/Tools/python-2.7.10.amd64/Scripts')
-        share.addpath('C:/Tools/python-2.7.10.amd64')
-    end,
-    use_hg333 = function()
-        share.addpath('C:/Tools/Mercurial')
+    use_gcc64_481 = function()
+        share.addpath('C:/Tools/Mingw64_4.8.1-3/bin')
     end,
     use_hg = function()
-        share.addpath('C:/Tools/Mercurial')
+        share.addpath('C:/Tools/Python_2.7.8')
+        share.addpath('C:/Tools/Mercurial/SCRIPTS')
+        nyagos.exec('alias hg="python C:/Tools/Mercurial/SCRIPTS/hg"')
+    end,
+    use_python = function()
+        share.addpath('C:/Tools/Python_2.7.8')
     end,
     use_git = function()
-        share.addpath('C:/Tools/Git/bin')
         nyagos.setenv('TERM', 'msys')
+        share.addpath('C:/Tools/Git/bin')
     end,
     use_go64 = function()
-        nyagos.exec('use_git')
-        nyagos.setenv('GOROOT', 'C:/Tools/Go64')
-        nyagos.setenv('GOPATH', 'C:/Tools/gopath')
-        share.addpath(nyagos.getenv('GOROOT') .. '/bin')
-    end,
-    use_go32 = function()
-        nyagos.exec('use_git')
-        nyagos.setenv('GOROOT', 'C:/Tools/Go32')
+        nyagos.setenv('GOROOT', 'C:/Tools/go64')
         nyagos.setenv('GOPATH', 'C:/Tools/gopath')
         share.addpath(nyagos.getenv('GOROOT') .. '/bin')
     end,
     use_godev = function()
-        nyagos.setenv('GOROOT', 'C:/Tools/godev')
+        nyagos.setenv('GOROOT', 'C:/Tools/GoDev')
+        nyagos.setenv('GOPATH', 'C:/Tools/gopath')
+        share.addpath(nyagos.getenv('GOROOT') .. '/bin')
+    end,
+    use_go32 = function()
+        nyagos.setenv('GOROOT', 'C:/Tools/go32')
         nyagos.setenv('GOPATH', 'C:/Tools/gopath')
         share.addpath(nyagos.getenv('GOROOT') .. '/bin')
     end,
@@ -152,27 +128,20 @@ alias{
         nyagos.setenv('INCLUDE', 'C:/Tools/VC10/include')
         nyagos.setenv('LIB', 'C:/Tools/VC10/lib')
     end,
-    use_vc12 = function()
-        share.addpath('C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin')
-        nyagos.setenv('INCLUDE', 'C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/include')
-        nyagos.setenv('LIB', 'C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/lib')
+    use_vc14 = function()
+        share.addpath('C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin')
+        nyagos.setenv('INCLUDE', 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include;C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Include')
+        nyagos.setenv('LIB', 'C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/lib;C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib')
+        nyagos.setenv('VisualStudioVersion', '14.0')
     end,
     use_vc10x64 = function()
         share.addpath('C:/Tools/VC10x64/bin/amd64')
         share.addpath('C:/Tools/VC10x64/bin/x64')
         nyagos.setenv('INCLUDE', 'C:/Tools/VC10x64/include')
-        nyagos.setenv('LIB', 'C:/Tools/VC10x64/lib/x64;C:/Tools/VC10x64/lib/amd64')
+        nyagos.setenv('LIB', 'C:/Tools/VC10x64/lib/amd64;C:/Tools/VC10x64/lib/x64;')
     end,
-    use_llvm361 = function()
-        share.addpath('C:/Tools/LLVM_3.6.1/bin')
-    end,
-    use_llvm370 = function()
-        share.addpath('C:/Tools/LLVM_3.7.0_32/bin')
-        share.addpath('C:/Tools/mingw_5.1.0/bin')
-    end,
-    use_rust64 = function()
-        share.addpath('C:/Tools/Rust64/bin')
-        share.addpath('C:/Tools/Rust64/bin/rustlib/i686-pc-windows-gnu/bin')
+    use_llvm360 = function()
+        share.addpath('C:/Tools/LLVM_3.6.0/bin')
     end,
     use_swig = function()
         share.addpath('C:/Tools/swig/bin')
@@ -180,29 +149,36 @@ alias{
     use_doxygen = function()
         share.addpath('C:/Tools/Doxygen/bin/Release')
     end,
+    use_android = function()
+        share.addpath('C:/Tools/apache-ant-1.9.6/bin')
+        share.addpath('C:/Tools/Android/sdk/tools')
+        share.addpath('C:/Tools/Android/sdk/platform-tools')
+        nyagos.setenv('JAVA_HOME', 'C:/Program Files/Java/jdk1.8.0_20')
+    end,
     use_nodejs = function()
-        nyagos.exec('use_git')
-        nyagos.exec('use_python')
-        share.addpath('C:/Tools/nodejs/v4.1.0')
-        share.addpath(share.home .. '/AppData/Roaming/npm')
-        nyagos.setenv('NODE_HOME', 'C:/Tools/nodejs/v4.1.0')
+        share.addpath('C:/Tools/nodejs')
+        share.addpath('%USERPROFILE%/AppData/Roaming/npm')
+        nyagos.setenv('NODE_HOME', 'C:/Tools/nodejs')
     end,
-    use_heroku = function()
-        nyagos.exec('use_nodejs')
-        share.addpath('C:/Program Files (x86)/Heroku/bin')
-        nyagos.setenv('HerokuPath', 'C:/Program Files (x86)/Heroku')
-        share.addpath('C:/Tools/pgsql/bin')
+    use_cf = function()
+        share.addpath('C:/Tools/CloudFoundryCLI/bin')
     end,
-    use_bluemix = function()
-        share.addpath('C:/Tools/CloudFoundry/bin')
+    use_postgres = function()
+        share.addpath('C:/Tools/postgresql/bin')
     end,
-    use_arduino=function()
+    use_rust32 = function()
+        share.addpath('C:/Tools/Rust32/bin')
+    end,
+    use_rust64 = function()
+        share.addpath('C:/Tools/Rust64/bin')
+    end,
+    use_arduino = function()
         share.addpath('C:/Tools/python-2.7.10.amd64')
         share.addpath('C:/Tools/python-2.7.10.amd64/Scripts')
         share.addpath(share.home .. '/.platformio/packages/toolchain-atmelavr/bin')
         nyagos.setenv('SYSROOT', share.home .. '/.platformio/packages/toolchain-atmelavr')
     end,
-    use_nucleo=function()
+    use_nucleo = function()
         share.addpath('C:/Tools/python-2.7.10.amd64')
         share.addpath('C:/Tools/python-2.7.10.amd64/Scripts')
         share.addpath(share.home .. '/.platformio/packages/toolchain-gccarmnoneeabi/bin')
