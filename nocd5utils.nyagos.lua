@@ -1,6 +1,5 @@
 share.directory_stack = {}
 share.migemo_dict = 'C:/Tools/bin/dict/utf-8/migemo-dict'
-share.luamigemo = nil
 
 share.print = function(s)
     nyagos.write(s)
@@ -309,10 +308,11 @@ share.getDirectoryList = function(parent, pattern)
     local line = nyagos.eval('ls -lar ' .. parent) -- nyagos組み込みの`ls`
     local complst = share.split(line, '[\r\n]')
     local directories = {}
+    local luamigemo = share.getLuamigemo()
     for i, e in ipairs(complst) do
         local name = tostring(e:gsub(".-%s+", "", 4))
         -- 末尾が'/'ならディレクトリって事で決め打ち
-        if share.getMatchingDirectory(name, pattern) then
+        if share.getMatchingDirectory(luamigemo, name, pattern) then
             -- ls -lの結果が
             -- <パーミション> <サイズ> <日付> <時間> <ファイル名 or ディレクトリ名>
             -- と出力されるので、スペースで区切られた5つ目の要素を取得
@@ -372,17 +372,14 @@ end
 ---------------------------------------------------------
 -- luamigemo関係
 share.getLuamigemo = function()
-    if share.luamigemo == nil then
-        share.luamigemo = require('luamigemo')
-        share.luamigemo.open(share.migemo_dict, "UTF-8")
-    end
-    return share.luamigemo
+    local luamigemo = require('luamigemo')
+    luamigemo.open(share.migemo_dict, "UTF-8")
+    return luamigemo
 end
 -- 条件に一致する名前を返す
-share.getMatchingDirectory = function(name, pattern)
+share.getMatchingDirectory = function(luamigemo, name, pattern)
     local result = false
     if name:match('.*/$') then
-        local luamigemo = share.getLuamigemo()
         -- 正規表現に渡すパターンの下準備
         local strcf = ''
         local strque = ''
